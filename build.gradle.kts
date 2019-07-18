@@ -18,15 +18,13 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-redis")
-	implementation("org.springframework.boot:spring-boot-starter-jdbc")
+//	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+//	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	runtimeOnly("org.postgresql:postgresql")
-	testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.0")
-	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.5.0")
+// 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 		exclude(group = "junit", module = "junit")
