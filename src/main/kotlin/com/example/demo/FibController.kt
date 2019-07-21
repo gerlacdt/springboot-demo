@@ -5,11 +5,10 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class GreetingController(val fibService: FibService) {
+class FibController(val fibService: FibService) {
 
-    @RequestMapping("/greeting")
-    fun greeting(@RequestParam(value="name", defaultValue="World") name: String): Greeting {
-        return Greeting(id=5, content=name)
+    @RequestMapping("/fib")
+    fun fib(@RequestParam(value="n", defaultValue = "10") n: Int): FibResult {
+        return FibResult(n=n, result=fibService.fib(n))
     }
-
 }
