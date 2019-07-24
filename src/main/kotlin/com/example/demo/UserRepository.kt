@@ -1,33 +1,55 @@
 package com.example.demo
 
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource
+import org.springframework.jdbc.support.GeneratedKeyHolder
+import org.springframework.stereotype.Repository
+import java.sql.Connection
 import java.sql.ResultSet
 
 
+@Repository
 class UserRepository(val jdbcTemplate: JdbcTemplate) {
 
-    // lateinit var jdbcTemplate: JdbcTemplate
-
-    fun insert(u: User) {
-        this.jdbcTemplate.update("insert into users (firstname, surname, age, is_premium, email) " +
-                "values (?, ?, ?, ?, ?)", u.firstname, u.surname, u.age, u.isPremium, u.email )
+    fun insert(u: User): Int {
+        val keyHolder = GeneratedKeyHolder()
+        val insertSQL = "insert into users (firstname, surname, age, is_premium, email) " +
+        "values (?, ?, ?, ?, ?)"
+        val fn = {conn: Connection ->
+            val ps = conn.prepareStatement(insertSQL, arrayOf("id"))
+            ps.setString(1, u.firstname)
+            ps.setString(2, u.surname)
+            ps.setInt(3, u.age)
+            ps.setBoolean(4, u.isPremium)
+            ps.setString(5, u.email)
+            ps
+        }
+        this.jdbcTemplate.update(fn, keyHolder)
+        return keyHolder.getKey()!!.toInt()
     }
 
-    fun delete(id: Int) {
-
+    fun delete(id: Int): Int {
+        return this.jdbcTemplate.update("delete from users where id = ?", id)
     }
 
-    fun findById(id: Int): User {
-        val query = "SELECT * FROM users WHERE ID = ?";
-        val users = jdbcTemplate.queryForObject(
-                query, Object[] { id }, UserRowMapper());
 
-        return User(1,"firstname", "surname", 38, "email@foo.com")
+    fun findById(id: Int): User? {
+        val query = "select * from users where id = ?"
+        try {
+            return jdbcTemplate.queryForObject(
+                    query, arrayOf<Int>(id) , UserRowMapper())!!
+        } catch (e: EmptyResultDataAccessException) {
+            return null
+        }
     }
+
 
     fun findAll(): List<User> {
-        return listOf<User>()
+        val query = "SELECT * FROM users"
+        return jdbcTemplate.query(
+                query, UserRowMapper())
     }
 }
 
