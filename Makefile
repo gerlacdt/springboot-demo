@@ -6,6 +6,10 @@ build:
 test:
 	gradle test
 
+.PHONY: clean
+clean:
+	gradle clean
+
 .PHONY: run
 run:
 	gradle bootRun
