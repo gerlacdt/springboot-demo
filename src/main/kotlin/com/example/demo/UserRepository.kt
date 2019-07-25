@@ -13,6 +13,10 @@ import java.sql.ResultSet
 @Repository
 class UserRepository(val jdbcTemplate: JdbcTemplate) {
 
+    fun truncate() {
+        this.jdbcTemplate.update("TRUNCATE TABLE users")
+    }
+
     fun insert(u: User): Int {
         val keyHolder = GeneratedKeyHolder()
         val insertSQL = "insert into users (firstname, surname, age, is_premium, email) " +
