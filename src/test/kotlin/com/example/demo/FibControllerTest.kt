@@ -28,6 +28,7 @@ class FibControllerTest {
         val fibResult = mapper.readValue(s, FibResult::class.java)
         println("response: $fibResult")
 
+
         val expected = FibResult(10, 55)
         assertEquals(expected, fibResult)
     }
