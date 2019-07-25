@@ -1,7 +1,5 @@
-package com.example.demo
+package com.example.demo.user
 
-import com.example.demo.api.UserGetAllResponse
-import com.example.demo.api.UserInsertResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.junit.jupiter.api.Assertions.assertEquals

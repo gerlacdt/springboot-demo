@@ -1,4 +1,4 @@
-package com.example.demo
+package com.example.demo.fib
 
 import org.springframework.stereotype.Service
 

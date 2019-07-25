@@ -1,4 +1,4 @@
-package com.example.demo
+package com.example.demo.fib
 
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -9,6 +9,6 @@ class FibController(val fibService: FibService) {
 
     @RequestMapping("/fib")
     fun fib(@RequestParam(value="n", defaultValue = "10") n: Int): FibResult {
-        return FibResult(n=n, result=fibService.fib(n))
+        return FibResult(n = n, result = fibService.fib(n))
     }
 }

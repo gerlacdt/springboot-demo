@@ -1,4 +1,4 @@
-package com.example.demo
+package com.example.demo.fib
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -14,9 +14,6 @@ class FibHttpTest {
 
     @LocalServerPort
     var port: Int? = null
-
-    @Autowired
-    lateinit var controller: GreetingController
 
     @Autowired
     lateinit var restTemplate: TestRestTemplate
