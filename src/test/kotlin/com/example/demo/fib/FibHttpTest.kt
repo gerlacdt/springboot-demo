@@ -1,6 +1,7 @@
 package com.example.demo.fib
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -26,4 +27,11 @@ class FibHttpTest {
         assertEquals(FibResult(10, 55), response)
     }
 
+    @Tag("fast")
+    @Test
+    fun outputTest() {
+        for (i in 1..10) {
+            println("output foobar")
+        }
+    }
 }

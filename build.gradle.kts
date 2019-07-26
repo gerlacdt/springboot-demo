@@ -33,8 +33,13 @@ dependencies {
 }
 
 tasks.withType<Test> {
-	useJUnitPlatform()
+	useJUnitPlatform {
+		includeTags("fast")
+		excludeTags("slow")
+	}
 }
+
+
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {

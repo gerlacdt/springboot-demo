@@ -8,4 +8,3 @@ CREATE TABLE users (
        age smallint,
        is_premium boolean NOT NULL
 )
-
