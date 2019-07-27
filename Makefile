@@ -6,6 +6,14 @@ build:
 test:
 	gradle test
 
+.PHONY: test-int
+test-int:
+	gradle test-int
+
+.PHONY: test-unit
+test-unit:
+	gradle test-unit
+
 .PHONY: clean
 clean:
 	gradle clean

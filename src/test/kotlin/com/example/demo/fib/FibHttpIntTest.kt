@@ -11,7 +11,7 @@ import java.net.URL
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class FibHttpTest {
+class FibHttpIntTest {
 
     @LocalServerPort
     var port: Int? = null
@@ -25,13 +25,5 @@ class FibHttpTest {
         val response = restTemplate.getForObject(base.toString(), FibResult::class.java)
         println("response: ${response}")
         assertEquals(FibResult(10, 55), response)
-    }
-
-    @Tag("fast")
-    @Test
-    fun outputTest() {
-        for (i in 1..10) {
-            println("output foobar")
-        }
     }
 }

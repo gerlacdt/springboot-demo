@@ -33,9 +33,25 @@ dependencies {
 }
 
 tasks.withType<Test> {
-	useJUnitPlatform {
-		includeTags("fast")
-		excludeTags("slow")
+	useJUnitPlatform()
+	// no filter, include all tests
+}
+
+
+tasks.register<Test>("test-unit") {
+	useJUnitPlatform()
+	filter {
+		//include all unit tests
+		includeTestsMatching("*UnitTest")
+	}
+}
+
+
+tasks.register<Test>("test-int") {
+	useJUnitPlatform()
+	filter {
+		//include all integration tests
+		includeTestsMatching("*IntTest")
 	}
 }
 

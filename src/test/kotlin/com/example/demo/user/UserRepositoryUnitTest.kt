@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
-class UserRepositoryTest {
+class UserRepositoryUnitTest {
 
     @Autowired
     lateinit var userRepository: UserRepository
