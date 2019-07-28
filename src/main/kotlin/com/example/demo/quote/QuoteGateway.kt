@@ -9,7 +9,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder
 @Component
 class QuoteGateway(val restTemplateBuilder: RestTemplateBuilder) {
 
-    var restTemplate: RestTemplate = restTemplateBuilder.
+    var restTemplate: RestTemplate = restTemplateBuilder.build()
 
     @Value("\${quote.baseurl}")
     lateinit var baseUrl: String
