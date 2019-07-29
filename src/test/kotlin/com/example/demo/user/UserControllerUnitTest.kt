@@ -38,7 +38,7 @@ class UserControllerUnitTest(@Autowired val userRepository: UserRepository) {
         val u = User(null, "firstname3", "surname", 39,
                 "email@example.com", false)
         val response = this.mockMvc.perform(
-                post("/users").contentType(MediaType.APPLICATION_JSON)
+                post("/api/users").contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(u)))
                 .andExpect(status().isCreated)
                 .andReturn()
@@ -55,7 +55,7 @@ class UserControllerUnitTest(@Autowired val userRepository: UserRepository) {
         val u = User(null, "firstname3", "surname", 39,
                 "email@example.com", false)
         val response = this.mockMvc.perform(
-                post("/users").contentType(MediaType.APPLICATION_JSON)
+                post("/api/users").contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(u)))
                 .andExpect(status().isCreated)
                 .andReturn()
@@ -65,7 +65,7 @@ class UserControllerUnitTest(@Autowired val userRepository: UserRepository) {
         assertNotNull(result)
         assert(result.id > 0)
 
-        val getResponse = this.mockMvc.perform(get("/users/${result.id}")).andExpect(status().isOk).andReturn()
+        val getResponse = this.mockMvc.perform(get("/api/users/${result.id}")).andExpect(status().isOk).andReturn()
         val returnedUser = mapper.readValue(getResponse.response.contentAsString, User::class.java)
         u.id = result.id
 
@@ -79,17 +79,17 @@ class UserControllerUnitTest(@Autowired val userRepository: UserRepository) {
         val u2 = User(null, "firstname4", "surname", 39,
                 "email@example.com", false)
         val mvcResponse = this.mockMvc.perform(
-                post("/users").contentType(MediaType.APPLICATION_JSON)
+                post("/api/users").contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(u)))
                 .andExpect(status().isCreated)
                 .andReturn()
         val mvcResponse2 = this.mockMvc.perform(
-                post("/users").contentType(MediaType.APPLICATION_JSON)
+                post("/api/users").contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(u2)))
                 .andExpect(status().isCreated)
                 .andReturn()
 
-        val mvcResponse3 = this.mockMvc.perform(get("/users")).andExpect(status().isOk).andReturn()
+        val mvcResponse3 = this.mockMvc.perform(get("/api/users")).andExpect(status().isOk).andReturn()
         val users = mapper.readValue(mvcResponse3.response.contentAsString, UserGetAllResponse::class.java)
 
         assertEquals(2, users.users.size)
@@ -102,21 +102,21 @@ class UserControllerUnitTest(@Autowired val userRepository: UserRepository) {
         val u2 = User(null, "firstname4", "surname", 39,
                 "email@example.com", false)
         val mvcResponse = this.mockMvc.perform(
-                post("/users").contentType(MediaType.APPLICATION_JSON)
+                post("/api/users").contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(u)))
                 .andExpect(status().isCreated)
                 .andReturn()
         val mvcResponse2 = this.mockMvc.perform(
-                post("/users").contentType(MediaType.APPLICATION_JSON)
+                post("/api/users").contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(u2)))
                 .andExpect(status().isCreated)
                 .andReturn()
 
         // delete one user
         val ( id ) = mapper.readValue(mvcResponse2.response.contentAsString, UserInsertResponse::class.java)
-        val mvcDeleteResponse = this.mockMvc.perform(delete("/users/${id}")).andExpect(status().isAccepted).andReturn()
+        val mvcDeleteResponse = this.mockMvc.perform(delete("/api/users/${id}")).andExpect(status().isAccepted).andReturn()
 
-        val mvcGetResponse = this.mockMvc.perform(get("/users")).andExpect(status().isOk).andReturn()
+        val mvcGetResponse = this.mockMvc.perform(get("/api/users")).andExpect(status().isOk).andReturn()
         val users = mapper.readValue(mvcGetResponse.response.contentAsString, UserGetAllResponse::class.java)
 
         assertEquals(1, users.users.size)

@@ -8,26 +8,26 @@ import org.springframework.web.bind.annotation.*
 @Controller
 class UserController(val repo: UserRepository) {
 
-    @GetMapping("/users", "GET")
+    @GetMapping("/api/users", "GET")
     fun findAll(): ResponseEntity<UserGetAllResponse> {
         val response = UserGetAllResponse(repo.findAll())
         return ResponseEntity(response, HttpStatus.OK)
     }
 
-    @PostMapping("/users")
+    @PostMapping("/api/users")
     fun insert(@RequestBody user: User): ResponseEntity<UserInsertResponse> {
         user.id = null  // be safe here, we do not accept ids. We use SERIAL in our database
         val response = UserInsertResponse(repo.insert(user))
         return ResponseEntity(response, HttpStatus.CREATED)
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/api/users/{id}")
     fun delete(@PathVariable id: Int): ResponseEntity<Any> {
         repo.delete(id)
         return ResponseEntity(HttpStatus.ACCEPTED)
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/api/users/{id}")
     fun findById(@PathVariable id: Int): ResponseEntity<Any> {
         val u = repo.findById(id)
         if (u != null) {
