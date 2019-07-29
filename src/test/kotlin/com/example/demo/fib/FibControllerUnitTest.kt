@@ -19,7 +19,7 @@ class FibControllerUnitTest(@Autowired val mockMvc: MockMvc) {
     @Test
     fun fibTest() {
         val mapper = ObjectMapper().registerModule(KotlinModule())
-        val response = this.mockMvc.perform(get("/fib?n=10")).andExpect(status().isOk())
+        val response = this.mockMvc.perform(get("/api/fib?n=10")).andExpect(status().isOk())
                 .andReturn()
         val s = response.getResponse().getContentAsString()
         val fibResult = mapper.readValue(s, FibResult::class.java)

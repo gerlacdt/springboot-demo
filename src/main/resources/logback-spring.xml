@@ -16,4 +16,8 @@
         <appender-ref ref="Console" />
     </logger>
 
+    <logger name="org.zalando.logbook" level="trace" additivity="false">
+        <appender-ref ref="Console" />
+    </logger>
+
 </configuration>

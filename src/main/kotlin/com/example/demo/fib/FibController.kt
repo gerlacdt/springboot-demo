@@ -12,7 +12,7 @@ class FibController(val fibService: FibService) {
 
     val logger: Logger = LoggerFactory.getLogger(FibController::class.java)
 
-    @RequestMapping("/fib")
+    @RequestMapping("/api/fib")
     fun fib(@RequestParam(value="n", defaultValue = "10") n: Int): FibResult {
         val result = FibResult(n = n, result = fibService.fib(n))
         logger.info(append("result", result), "http request: fib($n) ")

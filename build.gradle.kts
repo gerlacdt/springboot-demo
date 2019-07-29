@@ -25,6 +25,7 @@ dependencies {
                 exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
         }
 	implementation("net.logstash.logback:logstash-logback-encoder:6.1")
+	implementation("org.zalando:logbook-spring-boot-starter:1.13.0")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.micrometer:micrometer-registry-prometheus:1.2.0")
     implementation("org.springframework.boot:spring-boot-starter-jetty")

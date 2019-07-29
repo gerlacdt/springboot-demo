@@ -18,7 +18,7 @@ class FibHttpIntTest(@Autowired val restTemplate: TestRestTemplate) {
 
     @Test
     fun fibTest() {
-        val base = URL("http://localhost:${port}/fib?n=10")
+        val base = URL("http://localhost:${port}/api/fib?n=10")
         val response = restTemplate.getForObject(base.toString(), FibResult::class.java)
         println("response: ${response}")
         assertEquals(FibResult(10, 55), response)
