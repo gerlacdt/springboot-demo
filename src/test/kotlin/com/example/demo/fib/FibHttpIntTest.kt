@@ -11,13 +11,10 @@ import java.net.URL
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class FibHttpIntTest {
+class FibHttpIntTest(@Autowired val restTemplate: TestRestTemplate) {
 
     @LocalServerPort
     var port: Int? = null
-
-    @Autowired
-    lateinit var restTemplate: TestRestTemplate
 
     @Test
     fun fibTest() {

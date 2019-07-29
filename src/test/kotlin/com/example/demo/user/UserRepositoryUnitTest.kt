@@ -10,10 +10,7 @@ import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
-class UserRepositoryUnitTest {
-
-    @Autowired
-    lateinit var userRepository: UserRepository
+class UserRepositoryUnitTest(@Autowired val userRepository: UserRepository) {
 
     @BeforeEach
     fun beforeEach() {

@@ -19,10 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class UserControllerUnitTest {
-
-    @Autowired
-    lateinit var userRepository: UserRepository
+class UserControllerUnitTest(@Autowired val userRepository: UserRepository) {
 
     @BeforeEach
     fun beforeEach() {

@@ -14,10 +14,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class FibControllerUnitTest {
-
-    @Autowired
-    lateinit var mockMvc: MockMvc
+class FibControllerUnitTest(@Autowired val mockMvc: MockMvc) {
 
     @Test
     fun fibTest() {
