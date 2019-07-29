@@ -24,9 +24,10 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web") {
                 exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
         }
-        implementation("org.springframework.boot:spring-boot-starter-actuator")
-        implementation("io.micrometer:micrometer-registry-prometheus:1.2.0")
-        implementation("org.springframework.boot:spring-boot-starter-jetty")
+	implementation("net.logstash.logback:logstash-logback-encoder:6.1")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.2.0")
+    implementation("org.springframework.boot:spring-boot-starter-jetty")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
