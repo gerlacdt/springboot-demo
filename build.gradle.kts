@@ -24,6 +24,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web") {
                 exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
         }
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.9")
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.9")
+	implementation("com.fasterxml.jackson.module:jackson-module-parameter-names:2.9.9")
 	implementation("net.logstash.logback:logstash-logback-encoder:6.1")
 	implementation("org.zalando:logbook-spring-boot-starter:1.13.0")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")

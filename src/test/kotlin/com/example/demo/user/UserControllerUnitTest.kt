@@ -1,6 +1,7 @@
 package com.example.demo.user
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -31,6 +32,7 @@ class UserControllerUnitTest(@Autowired val userRepository: UserRepository) {
 
     // jackson json mapper
     val mapper = ObjectMapper().registerModule(KotlinModule())
+            .registerModule(JavaTimeModule())
 
     @Test
     fun insertUserTest() {
@@ -67,9 +69,16 @@ class UserControllerUnitTest(@Autowired val userRepository: UserRepository) {
 
         val getResponse = this.mockMvc.perform(get("/api/users/${result.id}")).andExpect(status().isOk).andReturn()
         val returnedUser = mapper.readValue(getResponse.response.contentAsString, User::class.java)
-        u.id = result.id
+        val id = result.id
 
-        assertEquals(u, returnedUser)
+        assertEquals(id, returnedUser.id)
+        assertEquals(u.firstname, returnedUser.firstname)
+        assertEquals(u.surname, returnedUser.surname)
+        assertEquals(u.age, returnedUser.age)
+        assertEquals(u.email, returnedUser.email)
+        assertEquals(u.isPremium, returnedUser.isPremium)
+        assertNotNull(returnedUser.createdAt)
+        assertNotNull(returnedUser.updatedAt)
     }
 
     @Test

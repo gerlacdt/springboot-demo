@@ -15,8 +15,8 @@ class UserController(val repo: UserRepository) {
     }
 
     @PostMapping("/api/users")
-    fun insert(@RequestBody user: User): ResponseEntity<UserInsertResponse> {
-        user.id = null  // be safe here, we do not accept ids. We use SERIAL in our database
+    fun insert(@RequestBody u: UserInsertRequest): ResponseEntity<UserInsertResponse> {
+        val user = User(firstname=u.firstname, surname=u.surname, age=u.age, email=u.email, isPremium = u.isPremium)
         val response = UserInsertResponse(repo.insert(user))
         return ResponseEntity(response, HttpStatus.CREATED)
     }

@@ -7,6 +7,11 @@ import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Repository
 import java.sql.Connection
 import java.sql.ResultSet
+import java.sql.Timestamp
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.*
 
 
 @Repository
@@ -18,8 +23,8 @@ class UserRepository(val jdbcTemplate: JdbcTemplate) {
 
     fun insert(u: User): Int {
         val keyHolder = GeneratedKeyHolder()
-        val insertSQL = "insert into users (firstname, surname, age, is_premium, email) " +
-        "values (?, ?, ?, ?, ?)"
+        val insertSQL = "insert into users (firstname, surname, age, is_premium, email, created_at, updated_at) " +
+        "values (?, ?, ?, ?, ?, ?, ?)"
         val fn = {conn: Connection ->
             val ps = conn.prepareStatement(insertSQL, arrayOf("id"))
             ps.setString(1, u.firstname)
@@ -27,6 +32,9 @@ class UserRepository(val jdbcTemplate: JdbcTemplate) {
             ps.setInt(3, u.age)
             ps.setBoolean(4, u.isPremium)
             ps.setString(5, u.email)
+            val now = Instant.now()
+            ps.setTimestamp(6, java.sql.Timestamp.from(now))
+            ps.setTimestamp(7, java.sql.Timestamp.from(now))
             ps
         }
         this.jdbcTemplate.update(fn, keyHolder)
@@ -67,6 +75,10 @@ class UserRowMapper: RowMapper<User> {
         user.age = rs.getInt("age")
         user.email = rs.getString("email")
         user.isPremium = rs.getBoolean("is_premium")
+        val createdAt = rs.getTimestamp("created_at")
+        user.createdAt = createdAt.toInstant().atZone(ZoneId.of("Z")).toLocalDateTime()
+        val updatedAt  = rs.getTimestamp("updated_at")
+        user.updatedAt = updatedAt.toInstant().atZone(ZoneId.of("Z")).toLocalDateTime()
         return user
 
     }

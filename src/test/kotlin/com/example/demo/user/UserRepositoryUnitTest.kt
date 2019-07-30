@@ -32,8 +32,7 @@ class UserRepositoryUnitTest(@Autowired val userRepository: UserRepository) {
         val id = userRepository.insert(u)
         val user = userRepository.findById(id)
         assertNotNull(user)
-        u.id = id
-        assertEquals(u, user)
+        assertEquals(id, user?.id)
     }
 
     @Test
