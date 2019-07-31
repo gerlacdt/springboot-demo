@@ -9,11 +9,11 @@ import javax.validation.constraints.NotNull
 
 @ApiModel
 data class UserInsertRequest(
-        @get:ApiModelProperty(required = true) @get:NotBlank var firstname: String,
-        @get:ApiModelProperty(required = true) @get:NotBlank var surname: String,
-        @get:ApiModelProperty(required = true) @get:NotNull var age: Int,
-        @get:ApiModelProperty(required = true) @get:NotBlank var email: String,
-        @get:ApiModelProperty(required = true) @get:NotNull var premium: Boolean)
+        @get:ApiModelProperty(required = true) @field:NotBlank var firstname: String,
+        @get:ApiModelProperty(required = true) @field:NotBlank var surname: String,
+        @get:ApiModelProperty(required = true) @field:NotNull var age: Int,
+        @get:ApiModelProperty(required = true) @field:NotBlank var email: String,
+        @get:ApiModelProperty(required = true) @field:NotNull var premium: Boolean)
 
 data class UserInsertResponse(val id: Int)
 
