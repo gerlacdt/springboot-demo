@@ -34,7 +34,8 @@ class UserController(val repo: UserRepository) {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "create a user", response = UserInsertResponse::class)
     fun insert(@Valid @RequestBody u: UserInsertRequest): UserInsertResponse {
-        val user = User(firstname=u.firstname, surname=u.surname, age=u.age, email=u.email, premium = u.premium)
+        val user = User(firstname=u.firstname!!, surname=u.surname!!, age=u.age!!,
+                email=u.email!!, premium = u.premium!!)
         return UserInsertResponse(repo.insert(user))
     }
 
