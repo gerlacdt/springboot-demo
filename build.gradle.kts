@@ -19,7 +19,6 @@ repositories {
 
 
 dependencies {
-//	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-web") {
                 exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
@@ -43,7 +42,9 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 		exclude(group = "junit", module = "junit")
+		exclude(group = "org.mockito", module = "mockito-core")
 	}
+	testImplementation("com.ninja-squad:springmockk:1.1.2")
 }
 
 tasks.withType<Test> {
