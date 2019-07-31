@@ -19,9 +19,6 @@ class UserControllerIntTest(@Autowired val restTemplate: TestRestTemplate) {
 
     @Test
     fun insertUserTest() {
-        // insert user via http call
-        val u = UserInsertRequest("firstname3", "surname", 39,
-                "email", false)
         val request = HttpEntity(UserInsertRequest("firstname",
                 "surname", 39, "email", false))
         val response = restTemplate.postForObject("http://localhost:${port}/api/users",

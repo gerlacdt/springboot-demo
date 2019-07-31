@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
+import org.junit.jupiter.api.Assertions.assertThrows as assertThrows
 
 
 @SpringBootTest
@@ -57,7 +58,8 @@ class UserRepositoryUnitTest(@Autowired val userRepository: UserRepository) {
         val rowsProcessed = userRepository.delete(id)
         assertEquals(1, rowsProcessed)
 
-        val user = userRepository.findById(id)
-         assertNull(user)
+        assertThrows(NotFoundException::class.java, {
+            val user = userRepository.findById(id)
+        })
     }
 }

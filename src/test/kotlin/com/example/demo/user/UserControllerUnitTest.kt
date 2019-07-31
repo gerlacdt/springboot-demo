@@ -76,7 +76,7 @@ class UserControllerUnitTest(@Autowired val userRepository: UserRepository) {
         assertEquals(u.surname, returnedUser.surname)
         assertEquals(u.age, returnedUser.age)
         assertEquals(u.email, returnedUser.email)
-        assertEquals(u.isPremium, returnedUser.isPremium)
+        assertEquals(u.premium, returnedUser.premium)
         assertNotNull(returnedUser.createdAt)
         assertNotNull(returnedUser.updatedAt)
     }

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.lang.Exception
 import javax.validation.Valid
 
 @RestController
@@ -19,13 +20,8 @@ class UserController(val repo: UserRepository) {
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Int): ResponseEntity<Any> {
-        val u = repo.findById(id)
-        if (u != null) {
-            return ResponseEntity(u, HttpStatus.OK)
-        } else {
-            return ResponseEntity(HttpStatus.NOT_FOUND)
-        }
+    fun findById(@PathVariable id: Int): User {
+        return repo.findById(id)
     }
 
     @GetMapping
@@ -38,8 +34,10 @@ class UserController(val repo: UserRepository) {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "create a user", response = UserInsertResponse::class)
     fun insert(@Valid @RequestBody u: UserInsertRequest): UserInsertResponse {
-        val user = User(firstname=u.firstname, surname=u.surname, age=u.age, email=u.email, isPremium = u.isPremium)
+        val user = User(firstname=u.firstname, surname=u.surname, age=u.age, email=u.email, premium = u.premium)
         return UserInsertResponse(repo.insert(user))
     }
 
 }
+
+class NotFoundException(override val message: String): RuntimeException(message) {}

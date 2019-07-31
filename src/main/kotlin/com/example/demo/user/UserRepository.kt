@@ -30,7 +30,7 @@ class UserRepository(val jdbcTemplate: JdbcTemplate) {
             ps.setString(1, u.firstname)
             ps.setString(2, u.surname)
             ps.setInt(3, u.age)
-            ps.setBoolean(4, u.isPremium)
+            ps.setBoolean(4, u.premium)
             ps.setString(5, u.email)
             val now = Instant.now()
             ps.setTimestamp(6, java.sql.Timestamp.from(now))
@@ -42,17 +42,22 @@ class UserRepository(val jdbcTemplate: JdbcTemplate) {
     }
 
     fun delete(id: Int): Int {
-        return this.jdbcTemplate.update("delete from users where id = ?", id)
+        val numberOfRowsChanged = this.jdbcTemplate.update("delete from users where id = ?", id)
+        if (numberOfRowsChanged == 0) {
+            throw NotFoundException("User with id ${id}")
+        } else {
+            return numberOfRowsChanged
+        }
     }
 
 
-    fun findById(id: Int): User? {
+    fun findById(id: Int): User {
         val query = "select * from users where id = ?"
         try {
             return jdbcTemplate.queryForObject(
                     query, arrayOf<Int>(id) , UserRowMapper())!!
         } catch (e: EmptyResultDataAccessException) {
-            return null
+            throw NotFoundException("User with ID ${id} not found.")
         }
     }
 
@@ -74,7 +79,7 @@ class UserRowMapper: RowMapper<User> {
         user.surname = rs.getString("surname")
         user.age = rs.getInt("age")
         user.email = rs.getString("email")
-        user.isPremium = rs.getBoolean("is_premium")
+        user.premium = rs.getBoolean("is_premium")
         val createdAt = rs.getTimestamp("created_at")
         user.createdAt = createdAt.toInstant().atZone(ZoneId.of("Z")).toLocalDateTime()
         val updatedAt  = rs.getTimestamp("updated_at")
