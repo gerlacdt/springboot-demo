@@ -20,7 +20,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class UserControllerUnitTest(@Autowired val userRepository: UserRepository) {
+class UserControllerUnitTest(@Autowired val userRepository: UserRepository,
+                             @Autowired val mapper: ObjectMapper) {
 
     @BeforeEach
     fun beforeEach() {
@@ -29,10 +30,6 @@ class UserControllerUnitTest(@Autowired val userRepository: UserRepository) {
 
     @Autowired
     lateinit var mockMvc: MockMvc
-
-    // jackson json mapper
-    val mapper = ObjectMapper().registerModule(KotlinModule())
-            .registerModule(JavaTimeModule())
 
     @Test
     fun insertUserTest() {

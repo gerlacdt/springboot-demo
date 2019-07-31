@@ -16,11 +16,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class FibControllerUnitTest(@Autowired val mockMvc: MockMvc) {
+class FibControllerUnitTest(@Autowired val mockMvc: MockMvc,
+                            @Autowired val mapper: ObjectMapper) {
 
     @Test
     fun fibTest() {
-        val mapper = ObjectMapper().registerModule(KotlinModule())
         val response = this.mockMvc.perform(get("/api/fib?n=10")).andExpect(status().isOk())
                 .andReturn()
         val s = response.getResponse().getContentAsString()

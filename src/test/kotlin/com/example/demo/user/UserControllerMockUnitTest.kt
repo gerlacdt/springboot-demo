@@ -21,13 +21,11 @@ import java.time.LocalDateTime
 
 @WebMvcTest(UserController::class)
 @ActiveProfiles("test")
-class UserControllerMockUnitTest(@Autowired val mockMvc: MockMvc) {
+class UserControllerMockUnitTest(@Autowired val mockMvc: MockMvc,
+                                 @Autowired val mapper: ObjectMapper) {
 
     @MockkBean
     lateinit var userRepository: UserRepository
-
-    val mapper = ObjectMapper().registerModule(KotlinModule())
-            .registerModule(JavaTimeModule())
 
     @Test
     fun findAllTest() {
