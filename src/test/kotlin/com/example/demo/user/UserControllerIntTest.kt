@@ -2,6 +2,7 @@ package com.example.demo.user
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -14,10 +15,23 @@ import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class UserControllerIntTest(@Autowired val restTemplate: TestRestTemplate) {
+class UserControllerIntTest {
+
+    @Autowired
+    lateinit var restTemplate: TestRestTemplate
+
+    @Autowired
+    lateinit var userRepository: UserRepository
 
     @LocalServerPort
     var port: Int? = null
+
+
+    @BeforeEach
+    fun beforeEach() {
+        userRepository.truncate()
+    }
+
 
     @Test
     fun insertUserTest() {
@@ -35,8 +49,19 @@ class UserControllerIntTest(@Autowired val restTemplate: TestRestTemplate) {
                 "", false)
         val request = HttpEntity(userWithBlankEmail)
         val response = restTemplate.postForEntity("http://localhost:${port}/api/users",
-                request, UserInsertResponse::class.java)
+                request, String::class.java)
 
+        println("response: ${response}")
         assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
+    }
+
+    @Test
+    fun findByIdNotFoundTest() {
+        val nonExistingId = 42
+        val response = restTemplate.
+                getForEntity("http://localhost:${port}/api/users/${nonExistingId}", ErrorResponse::class.java)
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(ErrorResponse(HttpStatus.NOT_FOUND.value(), "User with ID 42 not found.", listOf<String>()), response.body)
     }
 }

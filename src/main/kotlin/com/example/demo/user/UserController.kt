@@ -15,19 +15,21 @@ class UserController(val repo: UserRepository) {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @ApiOperation(value = "delete user with given id")
     fun delete(@PathVariable id: Int) {
         repo.delete(id)
     }
 
     @GetMapping("/{id}")
+    @ApiOperation(value = "get user by id", response = User::class)
     fun findById(@PathVariable id: Int): User {
         return repo.findById(id)
     }
 
     @GetMapping
-    fun findAll(): ResponseEntity<UserGetAllResponse> {
-        val response = UserGetAllResponse(repo.findAll())
-        return ResponseEntity(response, HttpStatus.OK)
+    @ApiOperation(value = "get all users", response = UserGetAllResponse::class)
+    fun findAll(): UserGetAllResponse {
+        return UserGetAllResponse(repo.findAll())
     }
 
     @PostMapping
