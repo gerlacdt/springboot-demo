@@ -120,7 +120,7 @@ class UserControllerUnitTest(@Autowired val userRepository: UserRepository,
 
         // delete one user
         val ( id ) = mapper.readValue(mvcResponse2.response.contentAsString, UserInsertResponse::class.java)
-        val mvcDeleteResponse = this.mockMvc.perform(delete("/api/users/${id}")).andExpect(status().isAccepted).andReturn()
+        val mvcDeleteResponse = this.mockMvc.perform(delete("/api/users/${id}")).andExpect(status().isNoContent).andReturn()
 
         val mvcGetResponse = this.mockMvc.perform(get("/api/users")).andExpect(status().isOk).andReturn()
         val users = mapper.readValue(mvcGetResponse.response.contentAsString, UserGetAllResponse::class.java)

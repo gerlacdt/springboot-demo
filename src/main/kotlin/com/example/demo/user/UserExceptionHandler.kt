@@ -15,8 +15,16 @@ class UserExceptionHandler: ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(NotFoundException::class)
     fun handleNotFoundEx(ex: NotFoundException, request: WebRequest): ResponseEntity<ErrorResponse> {
-        val err = ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.message, listOf<String>())
+        val err = ErrorResponse(HttpStatus.NOT_FOUND.value(),
+                ex.message, listOf<String>())
         return ResponseEntity(err, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(Exception::class)
+    fun handleGlobalException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        val err = ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                ex?.message ?: "Unknown error", listOf<String>())
+        return ResponseEntity(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
     //@ExceptionHandler(MethodArgumentNotValidException::class)
