@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.HttpEntity
+import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 
@@ -55,6 +56,16 @@ class UserControllerIntTest {
         assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
     }
 
+    @Test
+    fun updateUserTest() {
+        val user = User(42, "firstname", "surname", 20, "email21", true)
+        val request = HttpEntity(user)
+        val response = restTemplate.exchange("http://localhost:${port}/api/users/42", HttpMethod.PUT,
+                request, String::class.java)
+
+        println("PUT response: ${response}")
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.statusCode)
+    }
     @Test
     fun findByIdNotFoundTest() {
         val nonExistingId = 42

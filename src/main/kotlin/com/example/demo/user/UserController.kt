@@ -47,6 +47,16 @@ class UserController(val repo: UserRepository) {
         return UserGetAllResponse(repo.findAll())
     }
 
+    @PutMapping("/{id}")
+    @ApiOperation(value = "updated user with given id")
+    @ApiResponses(
+            ApiResponse(code = 204, message = "Successfully updated user"),
+            ApiResponse(code = 500, message = "Unknown server error")
+    )
+    fun updateUser(user: User) {
+        throw NotImplementedError("Not implemented PUT /users/{id}")
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "create a user", response = UserInsertResponse::class)
