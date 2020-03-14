@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
-import javax.servlet.http.HttpServletResponse
 
 @RestControllerAdvice
-class UserExceptionHandler: ResponseEntityExceptionHandler() {
+class UserExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(NotFoundException::class)
     fun handleNotFoundEx(ex: NotFoundException, request: WebRequest): ResponseEntity<ErrorResponse> {
@@ -27,7 +26,7 @@ class UserExceptionHandler: ResponseEntityExceptionHandler() {
         return ResponseEntity(err, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
-    //@ExceptionHandler(MethodArgumentNotValidException::class)
+    // @ExceptionHandler(MethodArgumentNotValidException::class)
     override fun handleMethodArgumentNotValid(ex: MethodArgumentNotValidException, headers: HttpHeaders, status: HttpStatus, request: WebRequest): ResponseEntity<Any> {
         val errors = mutableListOf<String>()
         for (err in ex.bindingResult.fieldErrors) {
@@ -39,7 +38,6 @@ class UserExceptionHandler: ResponseEntityExceptionHandler() {
         val err = ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.message, errors)
         return ResponseEntity(err, HttpStatus.BAD_REQUEST)
     }
-
 }
 
 data class ErrorResponse(val status: Int, val message: String, val errors: List<String>)

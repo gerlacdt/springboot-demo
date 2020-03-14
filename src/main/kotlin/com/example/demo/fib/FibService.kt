@@ -2,7 +2,6 @@ package com.example.demo.fib
 
 import org.springframework.stereotype.Service
 
-
 @Service
 class FibService {
     fun fib(n: Int): Int {

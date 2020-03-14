@@ -1,27 +1,25 @@
 package com.example.demo.foo
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
 import java.lang.RuntimeException
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 import java.util.function.Supplier
-import kotlin.random.Random
 import kotlin.system.measureTimeMillis
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 
 class PlayTest {
 
     @Test
     fun inheritTest() {
         val f = Derived("name", 4)
-        println("${f}")
+        println("$f")
         assertEquals(4, f.extra)
         assertEquals("name", f.message)
-
     }
 
-    class MySupplier: Supplier<String> {
+    class MySupplier : Supplier<String> {
         override fun get(): String {
             try {
 //                val x = Random.nextInt(10)
@@ -49,27 +47,26 @@ class PlayTest {
             }
             val allCompletabeFuture = CompletableFuture.allOf(*futures.toTypedArray())
             val fs = allCompletabeFuture.thenApply({ f ->
-                futures.map { f2 -> f2.join()}
+                futures.map { f2 -> f2.join() }
             })
             val actual = fs.get()
             println(actual)
-            val expected = (1..n).map { "foo"}
+            val expected = (1..n).map { "foo" }
             assertEquals(expected, actual)
         }
         assertTrue(time < 350, "Time is no in range")
     }
 }
 
-
 open class Base(val message: String) {
 
     override fun toString(): String {
-        return "message: ${message}"
+        return "message: $message"
     }
 }
-class Derived(message: String, val extra: Int): Base(message) {
+class Derived(message: String, val extra: Int) : Base(message) {
 
     override fun toString(): String {
-        return "message: ${message} extra: ${extra}"
+        return "message: $message extra: $extra"
     }
 }

@@ -1,12 +1,12 @@
 package com.example.demo.github
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import java.util.concurrent.CompletableFuture
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
-import java.util.concurrent.CompletableFuture
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class GithubUser(var name: String, var blog: String)
@@ -27,5 +27,4 @@ class GithubGateway(val restTemplateBuilder: RestTemplateBuilder) {
         val githubUser = GithubUser("danger", "danger.blog.io")
         return CompletableFuture.completedFuture(githubUser)
     }
-
 }

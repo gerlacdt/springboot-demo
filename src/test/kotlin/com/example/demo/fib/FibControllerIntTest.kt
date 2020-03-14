@@ -12,11 +12,12 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-
 @WebMvcTest(FibController::class)
 @ActiveProfiles("test")
-class FibControllerIntTest(@Autowired val mockMvc: MockMvc,
-                           @Autowired val mapper: ObjectMapper) {
+class FibControllerIntTest(
+    @Autowired val mockMvc: MockMvc,
+    @Autowired val mapper: ObjectMapper
+) {
 
     @MockkBean
     lateinit var fibService: FibService
@@ -29,7 +30,6 @@ class FibControllerIntTest(@Autowired val mockMvc: MockMvc,
         val s = response.getResponse().getContentAsString()
         val fibResult = mapper.readValue(s, FibResult::class.java)
         println("response: $fibResult")
-
 
         val expected = FibResult(10, 55)
         assertEquals(expected, fibResult)

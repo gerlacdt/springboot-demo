@@ -19,7 +19,6 @@ fun main(args: Array<String>) {
     runApplication<DemoApplication>(*args)
 }
 
-
 @Configuration
 @EnableSwagger2
 class SwaggerConfig {
@@ -32,5 +31,4 @@ class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build()
     }
-
 }

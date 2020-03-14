@@ -3,6 +3,7 @@ package com.example.demo.user
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import java.time.LocalDateTime
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,13 +14,13 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.time.LocalDateTime
-
 
 @WebMvcTest(UserController::class)
 @ActiveProfiles("test")
-class UserControllerMockUnitTest(@Autowired val mockMvc: MockMvc,
-                                 @Autowired val mapper: ObjectMapper) {
+class UserControllerMockUnitTest(
+    @Autowired val mockMvc: MockMvc,
+    @Autowired val mapper: ObjectMapper
+) {
 
     @MockkBean
     lateinit var userRepository: UserRepository
@@ -43,7 +44,7 @@ class UserControllerMockUnitTest(@Autowired val mockMvc: MockMvc,
         val users = mapper.readValue(response.response.contentAsString,
                 UserGetAllResponse::class.java)
 
-        println("users: ${users}")
+        println("users: $users")
         assertEquals(2, users.users.size)
     }
 }

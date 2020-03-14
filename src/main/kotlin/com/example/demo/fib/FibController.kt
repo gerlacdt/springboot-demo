@@ -1,7 +1,11 @@
 package com.example.demo.fib
 
 import com.example.demo.user.ErrorResponse
-import io.swagger.annotations.*
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
+import io.swagger.annotations.ApiResponse
+import io.swagger.annotations.ApiResponses
 import net.logstash.logback.marker.Markers.append
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -19,18 +23,19 @@ class FibController(val fibService: FibService) {
 
     @ApiOperation(value = "Calculates the nth fibonacci number", response = FibResult::class)
     @ApiResponses(
-        ApiResponse(code = 200, message = "Successful operation", response = FibResult::class),
-        ApiResponse(code = 500, message = "Unknown server error", response = ErrorResponse::class)
+            ApiResponse(code = 200, message = "Successful operation", response = FibResult::class),
+            ApiResponse(code = 500, message = "Unknown server error", response = ErrorResponse::class)
     )
     @GetMapping
-    fun fib(@ApiParam(value = "nth fibonacci", defaultValue = "10")
-            @RequestParam(value="n", defaultValue = "10") n: Int): FibResult {
+    fun fib(
+        @ApiParam(value = "nth fibonacci", defaultValue = "10")
+        @RequestParam(value = "n", defaultValue = "10") n: Int
+    ): FibResult {
         val result = FibResult(n = n, result = fibService.fib(n))
         logger.info(append("result", result), "http request: fib($n) ")
         return result
     }
 }
-
 
 // swagger urls
 // http://localhost:8080/v2/api-docs

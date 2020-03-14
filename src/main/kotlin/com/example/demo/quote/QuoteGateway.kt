@@ -1,10 +1,9 @@
 package com.example.demo.quote
 
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder
-
 
 @Component
 class QuoteGateway(val restTemplateBuilder: RestTemplateBuilder) {
@@ -17,8 +16,8 @@ class QuoteGateway(val restTemplateBuilder: RestTemplateBuilder) {
     fun getQuote(): Quote? {
         // https://gturnquist-quoters.cfapps.io/api/random
         println(baseUrl)
-        val quote = restTemplate.getForObject("${baseUrl}/api/random",
+        val quote = restTemplate.getForObject("$baseUrl/api/random",
                 Quote::class.java)
-        return quote;
+        return quote
     }
 }
