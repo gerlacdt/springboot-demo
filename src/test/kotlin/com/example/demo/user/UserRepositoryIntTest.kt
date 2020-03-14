@@ -1,30 +1,20 @@
 package com.example.demo.user
 
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
-import org.springframework.context.annotation.Import
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.transaction.annotation.Propagation
-import org.springframework.transaction.annotation.Transactional
+import org.junit.jupiter.api.Assertions.assertThrows as assertThrows
 
 
-@JdbcTest
-@Import(UserRepository::class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-// @Transactional(propagation = Propagation.NOT_SUPPORTED)
-@Transactional
+@SpringBootTest
 @ActiveProfiles("test")
-class UserRepositoryTransactionalUnitTest(@Autowired val userRepository: UserRepository) {
+class UserRepositoryIntTest(@Autowired val userRepository: UserRepository) {
 
-    // only needed once because tests run in a transaction
-    @BeforeAll
-    @Transactional(propagation = Propagation.NOT_SUPPORTED)
-    fun beforeAll() {
+    @BeforeEach
+    fun beforeEach() {
         userRepository.truncate()
     }
 
@@ -56,7 +46,7 @@ class UserRepositoryTransactionalUnitTest(@Autowired val userRepository: UserRep
         val id2 = userRepository.insert(u)
 
         val users = userRepository.findAll()
-        assert(users.size == 2, {"actual users.size: ${users.size}"})
+        assert(users.size >= 2)
     }
 
 

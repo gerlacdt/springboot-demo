@@ -12,7 +12,7 @@ import java.net.URL
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class FibHttpIntTest(@Autowired val restTemplate: TestRestTemplate) {
+class FibControllerWebIntTest(@Autowired val restTemplate: TestRestTemplate) {
 
     @LocalServerPort
     var port: Int? = null

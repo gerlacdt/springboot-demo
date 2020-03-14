@@ -1,78 +1,131 @@
 package com.example.demo.user
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.boot.web.server.LocalServerPort
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
-class UserControllerIntTest {
-
-    @Autowired
-    lateinit var restTemplate: TestRestTemplate
-
-    @Autowired
-    lateinit var userRepository: UserRepository
-
-    @LocalServerPort
-    var port: Int? = null
-
+class UserControllerIntTest(@Autowired val userRepository: UserRepository,
+                            @Autowired val mapper: ObjectMapper) {
 
     @BeforeEach
     fun beforeEach() {
         userRepository.truncate()
     }
 
+    @Autowired
+    lateinit var mockMvc: MockMvc
 
     @Test
     fun insertUserTest() {
-        val request = HttpEntity(UserInsertRequest("firstname",
-                "surname", 39, "email", false))
-        val response = restTemplate.postForObject("http://localhost:${port}/api/users",
-                request, UserInsertResponse::class.java)
-        println("response: ${response}")
-        assertTrue(response.id > 0)
+        // insert user via http call
+        val u = User(null, "firstname3", "surname", 39,
+                "email@example.com", false)
+        val response = this.mockMvc.perform(
+                post("/api/users").contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(u)))
+                .andExpect(status().isCreated)
+                .andReturn()
+
+        val result = mapper.readValue(response.response.contentAsString,
+                UserInsertResponse::class.java)
+
+        assertNotNull(result)
+        assert(result.id > 0)
     }
 
     @Test
-    fun insertInvalidUserTest() {
-        val userWithBlankEmail = UserInsertRequest("firstname3", "surname", 39,
-                "", false)
-        val request = HttpEntity(userWithBlankEmail)
-        val response = restTemplate.postForEntity("http://localhost:${port}/api/users",
-                request, String::class.java)
+    fun findByIdTest() {
+        val u = User(null, "firstname3", "surname", 39,
+                "email@example.com", false)
+        val response = this.mockMvc.perform(
+                post("/api/users").contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(u)))
+                .andExpect(status().isCreated)
+                .andReturn()
+        val result = mapper.readValue(response.response.contentAsString,
+                UserInsertResponse::class.java)
 
-        println("response: ${response}")
-        assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
+        assertNotNull(result)
+        assert(result.id > 0)
+
+        val getResponse = this.mockMvc.perform(get("/api/users/${result.id}")).andExpect(status().isOk).andReturn()
+        val returnedUser = mapper.readValue(getResponse.response.contentAsString, User::class.java)
+        val id = result.id
+
+        assertEquals(id, returnedUser.id)
+        assertEquals(u.firstname, returnedUser.firstname)
+        assertEquals(u.surname, returnedUser.surname)
+        assertEquals(u.age, returnedUser.age)
+        assertEquals(u.email, returnedUser.email)
+        assertEquals(u.premium, returnedUser.premium)
+        assertNotNull(returnedUser.createdAt)
+        assertNotNull(returnedUser.updatedAt)
     }
 
     @Test
-    fun updateUserTest() {
-        val user = User(42, "firstname", "surname", 20, "email21", true)
-        val request = HttpEntity(user)
-        val response = restTemplate.exchange("http://localhost:${port}/api/users/42", HttpMethod.PUT,
-                request, String::class.java)
+    fun findAllTest() {
+        val u = User(null, "firstname3", "surname", 39,
+                "email@example.com", false)
+        val u2 = User(null, "firstname4", "surname", 39,
+                "email@example.com", false)
+        val mvcResponse = this.mockMvc.perform(
+                post("/api/users").contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(u)))
+                .andExpect(status().isCreated)
+                .andReturn()
+        val mvcResponse2 = this.mockMvc.perform(
+                post("/api/users").contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(u2)))
+                .andExpect(status().isCreated)
+                .andReturn()
 
-        println("PUT response: ${response}")
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.statusCode)
+        val mvcResponse3 = this.mockMvc.perform(get("/api/users")).andExpect(status().isOk).andReturn()
+        val users = mapper.readValue(mvcResponse3.response.contentAsString, UserGetAllResponse::class.java)
+
+        assertEquals(2, users.users.size)
     }
-    @Test
-    fun findByIdNotFoundTest() {
-        val nonExistingId = 42
-        val response = restTemplate.
-                getForEntity("http://localhost:${port}/api/users/${nonExistingId}", ErrorResponse::class.java)
 
-        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
-        assertEquals(ErrorResponse(HttpStatus.NOT_FOUND.value(), "User with ID 42 not found.", listOf<String>()), response.body)
+    @Test
+    fun deleteTest() {
+        val u = User(null, "firstname3", "surname", 39,
+                "email@example.com", false)
+        val u2 = User(null, "firstname4", "surname", 39,
+                "email@example.com", false)
+        val mvcResponse = this.mockMvc.perform(
+                post("/api/users").contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(u)))
+                .andExpect(status().isCreated)
+                .andReturn()
+        val mvcResponse2 = this.mockMvc.perform(
+                post("/api/users").contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(u2)))
+                .andExpect(status().isCreated)
+                .andReturn()
+
+        // delete one user
+        val ( id ) = mapper.readValue(mvcResponse2.response.contentAsString, UserInsertResponse::class.java)
+        val mvcDeleteResponse = this.mockMvc.perform(delete("/api/users/${id}")).andExpect(status().isNoContent).andReturn()
+
+        val mvcGetResponse = this.mockMvc.perform(get("/api/users")).andExpect(status().isOk).andReturn()
+        val users = mapper.readValue(mvcGetResponse.response.contentAsString, UserGetAllResponse::class.java)
+
+        assertEquals(1, users.users.size)
+        assertEquals("firstname3", users.users.get(0).firstname)
     }
 }
