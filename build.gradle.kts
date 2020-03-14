@@ -9,8 +9,6 @@ buildscript {
     }
 }
 
-apply(plugin = "org.jlleitschuh.gradle.ktlint")
-
 plugins {
     id("org.springframework.boot") version "2.2.0.M4"
     id("io.spring.dependency-management") version "1.0.7.RELEASE"
