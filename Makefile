@@ -22,7 +22,7 @@ clean:
 run:
 	gradle bootRun
 
-docker-build: build
+docker-build:
 	docker build -t springboot-demo .
 
 .PHONY: docker-run
