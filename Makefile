@@ -27,4 +27,4 @@ docker-build:
 
 .PHONY: docker-run
 docker-run:
-	docker run -d -p 8080:8080 springboot-demo
+	docker run -d -p 8080:8080 --name demo springboot-demo

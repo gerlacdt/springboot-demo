@@ -16,7 +16,7 @@ RUN gradle assemble --no-daemon
 
 
 # target stage
-FROM adoptopenjdk:11-jre-hotspot
+FROM openjdk:8-jre-alpine
 COPY --from=build /app/build/libs/demo-*.jar /app/demo.jar
 WORKDIR /app
 EXPOSE 8080
